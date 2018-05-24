@@ -7,15 +7,15 @@
                     {{this.user_email}}
                 </a>
             </li>
-            <li>
-                <a href="/user/dashboard" method="get" id="dashboard">Dashboard</a>
 
+            <li>
+                <a href="#">Dashboard</a>
             </li>
             <li>
-                <a href="#" id="saved_url">Saved URL</a>
+                <a href="#">Saved URL</a>
             </li>
             <li>
-                <a href="/user">Overview</a>
+                <a href="#">Overview</a>
             </li>
             <li>
                 <a href="#">Contact</a>
@@ -23,7 +23,7 @@
             <li>
 
                 <li>
-                    <a href="/" id="logout-btn">Log Out</a>
+                    <a href="#" id="logout-btn">Log Out</a>
                     {{!-- <button class="btn btn-primary btn-sm" id="logout-btn" role="button">Log Out</button> --}}
                 </li>
 
@@ -42,9 +42,20 @@
             <hr class="my-4">
             <p>Just paste your url in the space below and be free from distraction.</p>
         </div>
-        {{!-- <div class="lead">
+
+        <div class="container">
+            <form method="POST" action="/article">
+                <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-lg">URL here:</span>
+                    </div>
+                    <input id="url" name="url" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                    <input class="btn btn-primary" type="submit" id="submit" value="Submit">
+                </div>
+            </form>
+            {{!-- <div class="lead">
                 <button class="btn btn-primary btn-sm" id="logout-btn" role="button">Log Out</button>
             </div> --}}
-
+        </div>
     </div>
-    {{> articles}}
+</div>

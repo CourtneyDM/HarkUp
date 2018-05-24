@@ -1,7 +1,8 @@
 $(() => {
 
-    let user = { user_email: null };
-
+    // var currentDate = document.querySelector('input[type="datetime-local"]');
+    // currentDate.value = moment().format("YYYY-MM-DD HH:mm:ss");
+    $("#signup_date").val(moment().format("YYYY-MM-DD HH:mm:ss"));
     // Initialize Firebase
     var config = {
         apiKey: "AIzaSyAcD-Z-rpHoK5bwrFQ5amWDJneTr-SZ59k",
@@ -39,8 +40,6 @@ $(() => {
     // Event listener for when the Log In button is clicked
     $("#login-btn").on("click", (e) => {
 
-        // e.preventDefault();
-
         // Initialize sign-in widget from FirebaseUI web
         var uiConfig = {
             // signInSuccessURL will load whenever user signs in, based on auth state change
@@ -52,65 +51,59 @@ $(() => {
                 firebase.auth.TwitterAuthProvider.PROVIDER_ID,
                 firebase.auth.GithubAuthProvider.PROVIDER_ID,
                 firebase.auth.EmailAuthProvider.PROVIDER_ID
-            ],
-            // Terms of service url.
-            tosUrl: '<your-tos-url>'
-        };
-        $
+            ]
 
+        };
         // Initialize the FirebaseUI Widget using Firebase
         var ui = new firebaseui.auth.AuthUI(firebase.auth());
         // The start method will wait until the DOM is loaded.
-
         ui.start('#firebaseui-auth-container', uiConfig);
-
     });
 
     // Event listener for when the Sign Up button is clicked
     $("#signup-btn").on("click", (e) => {
 
-        e.preventDefault();
-
-        let newUser = {
-            full_name: $("#full_name").val().trim(),
+        const user = {
+            full_name: $("#name").val().trim(),
             user_email: $("#user_email").val().trim(),
             user_password: $("#user_password").val().trim(),
-            signup_date: moment().format("YYYY-MM-DD HH:mm:ss")
+            signup_date: $("#signup_date").val().trim()
         };
+        // const user_email = $("#user_email").val().trim();
+        // const user_password = $("#user_password").val().trim();
 
         // User Firebase Authentication
         const auth = firebase.auth();
-        const promise = auth.createUserWithEmailAndPassword(newUser.user_email, newUser.user_password);
+        const promise = auth.createUserWithEmailAndPassword(user.user_email, user.user_password);
         promise.catch(err => alert(err.message));
-
-        // Send form data to the server
-        // $.post("/api/signup", newUser).then(data => {
-        //     console.log(`Created new user.`);
-        // });
     });
 
     // Event listener for when the user state changes
-    firebase.auth().onAuthStateChanged(firebaseUser => {
-        if (firebaseUser) {
-            const user = {
-                full_name: firebaseUser.displayName,
-                user_email: firebaseUser.email
-            };
-
-            console.log(`User Name: ${JSON.stringify(firebaseUser.displayName)}`);
-            console.log(`User Email: ${JSON.stringify(firebaseUser.email)}`);
-
-            // send the data to the server to be used in handlebars templates
-            $.post("/signed_in", user);
-        }
-        else {
-            $.get("/", data => {
+    initApp = () => {
+        firebase.auth().onAuthStateChanged(firebaseUser => {
+            if (firebaseUser) {
+                const user = {
+                    full_name: firebaseUser.displayName,
+                    user_email: firebaseUser.email
+                }
+                $.post("/api/user", user, data => {
+                    console.log("returned from server.");
+                    console.log(`Data: ${JSON.stringify(data)}`);
+                })
+                console.log(`Name: ${firebaseUser.displayName}`);
+                console.log(`Email: " ${JSON.stringify(firebaseUser.email)}`);
+            }
+            else {
                 console.log("No user logged in.");
-            });
-        }
+            }
+
+        }, error => { console.log(error); });
+
+    }
+
+    window.addEventListener('load', function () {
+        initApp();
     });
-
-
 
     // Event listener for when the Logout Button is clicked
     $("#logout-btn").on("click", (e) => {
@@ -124,7 +117,7 @@ $(() => {
         e.preventDefault();
 
         $.get("/user/dashboard", data => {
-            console.log("Dashboard");
+            console.log(`Data for dashboard: ${JSON.stringify(data, null, 2)}`);
         });
     });
 });

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Harkup TTS</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+
+    <!-- Include Firebase Project -->
+    <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js"></script>
+    <!-- Firebase UI Widget -->
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.css">
+
+    <!-- Font Awesome API -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+</head>
+<script>
+    $("#signup_date").val(moment().format("YYYY-MM-DD HH:mm:ss"));
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyAcD-Z-rpHoK5bwrFQ5amWDJneTr-SZ59k",
+        authDomain: "project-two-harkup.firebaseapp.com",
+        databaseURL: "https://project-two-harkup.firebaseio.com",
+        projectId: "project-two-harkup",
+        storageBucket: "project-two-harkup.appspot.com",
+        messagingSenderId: "614544647683"
+    };
+    firebase.initializeApp(config);
+</script>
+<script>
+    // Event listener for when the Log In button is clicked
+    $("#login-btn").on("click", (e) => {
+
+        // Initialize sign-in widget from FirebaseUI web
+        var uiConfig = {
+            // signInSuccessURL will load whenever user signs in, based on auth state change
+            signInSuccessUrl: "/user",
+            signInOptions: [
+                // Leave the lines as is for the providers you want to offer your users.
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+                firebase.auth.GithubAuthProvider.PROVIDER_ID,
+                firebase.auth.EmailAuthProvider.PROVIDER_ID
+            ]
+
+        };
+        // Initialize the FirebaseUI Widget using Firebase
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+        // The start method will wait until the DOM is loaded.
+        ui.start('#firebaseui-auth-container', uiConfig);
+    });
+</script>
+
+<body id="body" class="mb-2 text-white bg-dark">
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">HarkUp - Handlebars template</h1>
+            <p class="lead">Focus on the journey while you learn on the go.</p>
+            <hr class="my-4">
+            <p>Just paste your url in the space below and be free from distraction.</p>
+            <div class="lead">
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#login_modal" id="login-btn" role="button">Log In</button>
+
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#signup_modal" id="signup">Sign Up</button>
+
+            </div>
+        </div>
+
+        <!-- The Login In Modal -->
+        <div class="modal fade" id="login_modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">User Sign In</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body :: FIREBASE AUTH UI-->
+                    <div id="firebaseui-auth-container"></div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- The Sign Up Modal -->
+        <div class="modal fade" id="signup_modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">New User Signup</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="container modal-body">
+
+                        <div class="form-control">
+                            <label for="name">Full Name</label>
+                            <input name="user_name" type="input" id="name" aria-placeholder="First and Last Name" class="form-control">
+
+                            <label for="email">Email address</label>
+                            <input name="user_email" type="email" id="user_email" placeholder="Enter your email" class="form-control">
+
+                            <label for="pwd">Password</label>
+                            <input name="user_password" type="password" id="user_password" aria-placeholder="Choose a password..." class="form-control">
+
+                            <label for="date">Signup Date</label>
+                            <input name="signup_date" type="input" id="signup_date" class="form-control" readonly>
+                        </div>
+                        <a href="/user">
+                            <button type="submit" class="btn btn-primary" id="signup-btn">Complete</button>
+                        </a>
+
+                        <button type="submit" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <small id="emailSignHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container">
+        <form method="POST" action="/article">
+            <div class="input-group input-group-lg">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-lg">URL here:</span>
+                </div>
+                <input id="url" name="url" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                <input class="btn btn-primary" type="submit" id="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+    <!-- Personal Javascript file -->
+    <script src="/project-two/project-two/app/public/assets/js/app.js"></script>
+
+    <!-- Include MomentJS  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+
+    <!-- ResponsiveVoice API -->
+    <script src="http://code.responsivevoice.org/responsivevoice.js"></script>
+</body>
+
+</html>
